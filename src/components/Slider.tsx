@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ColorValue, Dimensions, StyleSheet, Text, View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import Animated, { interpolateColor, useAnimatedStyle, useSharedValue } from "react-native-reanimated";
+import Animated, { interpolateColor, useAnimatedReaction, useAnimatedStyle, useSharedValue } from "react-native-reanimated";
 import { scheduleOnRN } from "react-native-worklets";
 import { style } from "../resources/styles";
 
@@ -18,6 +18,7 @@ interface SliderProps {
 export const Slider = (props: SliderProps) => {
 	const progress = useSharedValue(props.value);
 	const [sliderWidth, setSliderWidth] = useState(0);
+	const [progressState, setProgress] = useState(0);
 
 	useEffect(() => {progress.set(props.value)}, [props.value]);
 
@@ -25,11 +26,11 @@ export const Slider = (props: SliderProps) => {
 		.onStart((e) => {
 			scheduleOnRN(props.onSlideStart);
 		})
-		.onUpdate((e) => {
+		.onChange((e) => {
 			const p = e.x / sliderWidth;
 			progress.set(Math.min(Math.max(p * props.maxValue, 0), props.maxValue));
 		})
-		.onEnd((e) => {scheduleOnRN(props.onSlideEnd, progress.get())});
+		.onEnd((e) => {scheduleOnRN(props.onSlideEnd, progress.value)});
 
 	const tapGesture = Gesture.Tap()
 		.onStart((e) => {
@@ -38,14 +39,18 @@ export const Slider = (props: SliderProps) => {
 		.onEnd((e) => {
 			const p = e.x / sliderWidth;
 			progress.set(Math.min(Math.max(p * props.maxValue, 0), props.maxValue));
-			scheduleOnRN(props.onSlideEnd, progress.get());
+			scheduleOnRN(props.onSlideEnd, progress.value);
 		});
 
 	const composedGestures = Gesture.Simultaneous(slideGesture, tapGesture);
 
 	const valueStyle = useAnimatedStyle(() => ({
-		width: `${((progress.get() / props.maxValue) * 100)}%`
+		width: `${((progress.value / props.maxValue) * 100)}%`
 	}))
+
+	useAnimatedReaction(() => progress.value, (value) => {
+		scheduleOnRN(setProgress, value);
+	})
 
 	return (
 		<GestureDetector gesture={composedGestures}>
@@ -53,7 +58,7 @@ export const Slider = (props: SliderProps) => {
 				<View onLayout={(e) => { setSliderWidth(e.nativeEvent.layout.width) }} style={{...sliderStyle.sliderEmpty, backgroundColor: interpolateColor(0.5, [0, 1], [props.color.toString(), "#00000000"])}}>
 					<Animated.View style={[{...sliderStyle.sliderFilled, backgroundColor: props.color}, valueStyle]}></Animated.View>
 				</View>
-				<Text style={{...style.fullPlayerPosition, color: props.color}}>{Math.floor(progress.get() / 60)}:{Math.floor(progress.get() % 60).toString().padStart(2, '0')}</Text>
+				<Text style={{...style.fullPlayerPosition, color: props.color}}>{Math.floor(progressState / 60)}:{Math.floor(progressState % 60).toString().padStart(2, '0')}</Text>
 			</View>
 		</GestureDetector>
 	);

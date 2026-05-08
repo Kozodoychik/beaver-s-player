@@ -11,7 +11,7 @@ export const Spectre = () => {
 
 	return (
 		<>
-		<Text>hui</Text>
+		<Text></Text>
 		<Canvas style={{flex: 1}}>
 			<Path path={p} color="#000">
 				<Paint style="stroke" strokeWidth={10} color="#000" />
