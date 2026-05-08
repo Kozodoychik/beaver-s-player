@@ -66,8 +66,8 @@ export const Player = () => {
 		opacity: playerHeight.value / (SCREEN_HEIGHT - 120),
 	}));
 
-	const title = track ? track.title : "<Ничего>";
-	const artist = track ? track.artist : "<Никто>";
+	const title = track?.title ? track.title : "<Ничего>";
+	const artist = track?.artist ? track.artist : "<Никто>";
 
 	return (
 		<GestureDetector gesture={panGesture}>
