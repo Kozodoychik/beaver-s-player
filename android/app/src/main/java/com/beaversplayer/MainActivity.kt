@@ -1,4 +1,4 @@
-package com.beaversplayer
+package com.velikiybobr.beaversplayer
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
