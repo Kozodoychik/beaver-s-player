@@ -118,7 +118,7 @@ export const style = StyleSheet.create({
 
 	playerArtwork: {
 		width: 50,
-		height: 45,
+		height: 50,
 
 		borderRadius: 5,
 		borderWidth: 1,
@@ -137,7 +137,7 @@ export const style = StyleSheet.create({
 		flex: 1,
 		flexDirection: "column",
 
-		justifyContent: "space-around",
+		justifyContent: "space-evenly",
 		alignItems: "center",
 
 		width: FULL_PLAYER_WIDTH,
@@ -159,7 +159,9 @@ export const style = StyleSheet.create({
 
 	fullPlayerTitle: {
 		fontSize: 30,
-		fontWeight: 800
+		fontWeight: 800,
+		textAlignVertical: "bottom",
+		height: 75
 	},
 
 	fullPlayerArtist: {
