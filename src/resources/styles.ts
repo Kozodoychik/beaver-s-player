@@ -110,7 +110,7 @@ export const style = StyleSheet.create({
 
 	playerArtwork: {
 		width: 50,
-		height: 50,
+		height: 45,
 
 		borderRadius: 5,
 		borderWidth: 1,
@@ -118,8 +118,8 @@ export const style = StyleSheet.create({
 	},
 
 	playButton: {
-		width: 50,
-		height: 50,
+		width: 60,
+		height: 70,
 
 		alignItems: "center",
 		justifyContent: "center"
@@ -164,6 +164,8 @@ export const style = StyleSheet.create({
 
 	fullPlayerControls: {
 		alignSelf: "center",
+		justifyContent: "center",
+		alignItems: "center",
 		flexDirection: "row",
 		gap: 40
 	}

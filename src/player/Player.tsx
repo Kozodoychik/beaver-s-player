@@ -1,5 +1,6 @@
 import TrackPlayer, { AppKilledPlaybackBehavior, Capability, State } from "@weights-ai/react-native-track-player";
 import { AudioFile } from "../types";
+import { dummyArtworkURI } from "../resources/dummyArtworkURI";
 
 
 export async function playerInit() {
@@ -17,7 +18,7 @@ export async function playerInit() {
 }
 
 export async function playerPlayTrack(item: AudioFile, title: string, artist: string) {
-	await TrackPlayer.add([{url: item.uri, title: title, artist: artist, artwork: item.artwork ? item.artwork : undefined}]);
+	await TrackPlayer.add([{url: item.uri, title: title, artist: artist, artwork: item.artwork ? item.artwork : dummyArtworkURI}]);
 	await TrackPlayer.skipToNext();
 	TrackPlayer.play();
 }

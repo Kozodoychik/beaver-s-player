@@ -87,11 +87,10 @@ export const Player = () => {
 						<Text numberOfLines={2} ellipsizeMode='tail' style={{...style.fullPlayerTitle, color: foregroundColor}}>{title}</Text>
 						<Text numberOfLines={1} ellipsizeMode='tail' style={{...style.fullPlayerArtist, color: foregroundColor}}>{artist}</Text>
 						<Slider color={foregroundColor} maxValue={progress.duration} value={progress.position} onSlideStart={playerPause} onSlideEnd={playerSeekAndPlay}/>
-						<Text style={{...style.fullPlayerPosition, color: foregroundColor}}>{Math.floor(progress.position / 60)}:{Math.floor(progress.position % 60).toString().padStart(2, '0')}</Text>
 						<View style={style.fullPlayerControls}>
-							<PrevButton color={foregroundColor} size={35} />
-							<PlayButton color={foregroundColor} size={45} />
-							<NextButton color={foregroundColor} size={35} />
+							<PrevButton color={foregroundColor} size={35} /> 
+							<PlayButton color={foregroundColor} size={55} />
+							<NextButton color={foregroundColor} size={35} /> 
 						</View>
 					</View>
 				</View>
