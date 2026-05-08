@@ -4,14 +4,13 @@ import { TouchableOpacity } from "react-native";
 import { style } from "../resources/styles";
 import { playerToggle } from "../player/Player";
 
-interface PlayButtonProps {
+interface PrevButtonProps {
 	color: string;
 	size: number;
 }
 
-export const PrevButton = (props: PlayButtonProps) => {
+export const PrevButton = (props: PrevButtonProps) => {
 	const state = usePlaybackState();
-	const isPlaying = state.state === State.Playing;
 
 	return (
 		<TouchableOpacity style={style.playButton} onPress={playerToggle}>

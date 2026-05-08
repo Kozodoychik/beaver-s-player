@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Image, PermissionsAndroid } from 'react-native';
+import { Alert, Image, PermissionsAndroid } from 'react-native';
 import { getTracksAsync } from '@nodefinity/react-native-music-library';
 import { AudioFile } from '../types';
 import { dummyArtworkURI } from '../resources/dummyArtworkURI';
@@ -13,14 +13,14 @@ export function useAudioFiles(): [AudioFile[], boolean] {
 		const readFiles = async () => {
 			let audios: AudioFile[] = [];
 
-			let status = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_MEDIA_AUDIO);
+			let permissionStatus = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_MEDIA_AUDIO);
 
-			if (status != PermissionsAndroid.RESULTS.GRANTED) {
+			if (permissionStatus != PermissionsAndroid.RESULTS.GRANTED) {
 				setStatus(true);
 				return;
 			}
 
-			let tracks = await getTracksAsync({first: 20});
+			let tracks = await getTracksAsync({first: Number.MAX_SAFE_INTEGER});
 
 			tracks.items.forEach((track) => {
 				let artwork = dummyArtworkURI;
@@ -38,14 +38,14 @@ export function useAudioFiles(): [AudioFile[], boolean] {
 						artwork: artwork, 
 						year: 0,
 					});
+					setAudioFiles(audios);
 				});
 			});
 
-			setAudioFiles(audios);
 			setStatus(true);
 		}
 
-		if (!status) readFiles();
+		readFiles();
 	}, []);
 
 	return [audioFiles, status];

@@ -69,6 +69,7 @@ export const Player = () => {
 	const title = track?.title ? track.title : "<Ничего>";
 	const artist = track?.artist ? track.artist : "<Никто>";
 
+	// TODO: разделить эту жесть на отдельные компоненты
 	return (
 		<GestureDetector gesture={panGesture}>
 			<Animated.View style={[style.player, {backgroundColor: backgroundColor}, fullPlayerStyle]}>
@@ -88,9 +89,9 @@ export const Player = () => {
 						<Slider color={foregroundColor} maxValue={progress.duration} value={progress.position} onSlideStart={playerPause} onSlideEnd={playerSeekAndPlay}/>
 						<Text style={{...style.fullPlayerPosition, color: foregroundColor}}>{Math.floor(progress.position / 60)}:{Math.floor(progress.position % 60).toString().padStart(2, '0')}</Text>
 						<View style={style.fullPlayerControls}>
-							<PrevButton color={foregroundColor} size={45} />
+							<PrevButton color={foregroundColor} size={35} />
 							<PlayButton color={foregroundColor} size={45} />
-							<NextButton color={foregroundColor} size={45} />
+							<NextButton color={foregroundColor} size={35} />
 						</View>
 					</View>
 				</View>
