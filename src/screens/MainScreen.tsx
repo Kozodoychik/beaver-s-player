@@ -9,7 +9,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 
 export function MainScreen() {
-	const [audioFiles, status] = useAudioFiles();
+	const audioFiles = useAudioFiles();
 
 	return (
 		<GestureHandlerRootView style={style.mainView}>

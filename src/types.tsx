@@ -1,7 +1,7 @@
 export interface AudioFile {
 	filename: string;
 	uri: string;
-	title: string | null;
+	title: string;
 	artist: string | null;
 	album: string | null;
 	artwork: string | null;

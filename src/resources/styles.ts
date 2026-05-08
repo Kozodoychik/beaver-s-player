@@ -108,6 +108,14 @@ export const style = StyleSheet.create({
 		justifyContent: "center"
 	},
 
+	miniPlayerPlayButton: {
+		width: 50,
+		height: 50,
+
+		alignItems: "center",
+		justifyContent: "center"
+	},
+
 	playerArtwork: {
 		width: 50,
 		height: 45,

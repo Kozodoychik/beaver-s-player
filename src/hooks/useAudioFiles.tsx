@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react';
-import { Alert, Image, PermissionsAndroid } from 'react-native';
+import { Image, PermissionsAndroid } from 'react-native';
 import { getTracksAsync } from '@nodefinity/react-native-music-library';
 import { AudioFile } from '../types';
 import { dummyArtworkURI } from '../resources/dummyArtworkURI';
 
 
-export function useAudioFiles(): [AudioFile[], boolean] {
+const trackSort = (a: AudioFile, b: AudioFile): number => {
+	return a.title > b.title ? 1 : -1;
+}
+
+export function useAudioFiles(): AudioFile[]{
 	const [audioFiles, setAudioFiles] = useState([] as AudioFile[]);
-	const [status, setStatus] = useState(false);
 
 	useEffect(() => {
 		const readFiles = async () => {
@@ -16,7 +19,6 @@ export function useAudioFiles(): [AudioFile[], boolean] {
 			let permissionStatus = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_MEDIA_AUDIO);
 
 			if (permissionStatus != PermissionsAndroid.RESULTS.GRANTED) {
-				setStatus(true);
 				return;
 			}
 
@@ -38,15 +40,13 @@ export function useAudioFiles(): [AudioFile[], boolean] {
 						artwork: artwork, 
 						year: 0,
 					});
-					setAudioFiles(audios);
+					setAudioFiles(audios.sort(trackSort));
 				});
 			});
-
-			setStatus(true);
 		}
 
 		readFiles();
 	}, []);
 
-	return [audioFiles, status];
+	return audioFiles;
 }

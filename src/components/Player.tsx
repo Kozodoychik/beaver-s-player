@@ -79,7 +79,7 @@ export const Player = () => {
 						<Text numberOfLines={1} ellipsizeMode='tail' style={{...style.musicListItemTitle, color: foregroundColor}}>{title}</Text>
 						<Text numberOfLines={1} ellipsizeMode='tail' style={{...style.musicListItemArtist, color: foregroundColor}}>{artist}</Text>
 					</View>
-					<PlayButton color={foregroundColor} size={25}/>
+					<PlayButton style={style.miniPlayerPlayButton} color={foregroundColor} size={25}/>
 				</Animated.View>
 				<View style={style.fullPlayer}>
 					<Image style={style.fullPlayerArtwork} source={{ uri: artwork }}/>
@@ -89,7 +89,7 @@ export const Player = () => {
 						<Slider color={foregroundColor} maxValue={progress.duration} value={progress.position} onSlideStart={playerPause} onSlideEnd={playerSeekAndPlay}/>
 						<View style={style.fullPlayerControls}>
 							<PrevButton color={foregroundColor} size={35} /> 
-							<PlayButton color={foregroundColor} size={55} />
+							<PlayButton style={style.playButton} color={foregroundColor} size={55} />
 							<NextButton color={foregroundColor} size={35} /> 
 						</View>
 					</View>
