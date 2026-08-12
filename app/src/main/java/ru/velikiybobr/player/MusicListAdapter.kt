@@ -8,7 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class MusicListAdapter(private val songs: List<SongItem>): RecyclerView.Adapter<MusicListAdapter.SongViewHolder>() {
+class MusicListAdapter(private val songs: List<SongItem>, private val musicManager: MusicManager): RecyclerView.Adapter<MusicListAdapter.SongViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -25,10 +25,10 @@ class MusicListAdapter(private val songs: List<SongItem>): RecyclerView.Adapter<
 
         holder.songName.text = song.title
         holder.songArtist.text = song.artist
-        holder.songArtwork.setImageBitmap(song.artwork)
+        holder.songArtwork.setImageURI(song.artworkUri)
 
         holder.itemView.setOnClickListener {
-            onClick(holder.itemView.context, song)
+            onClick(holder.itemView.context, pos)
         }
     }
 
@@ -36,8 +36,8 @@ class MusicListAdapter(private val songs: List<SongItem>): RecyclerView.Adapter<
         return songs.size
     }
 
-    fun onClick(context: Context, song: SongItem) {
-
+    fun onClick(context: Context, index: Int) {
+        musicManager.play(index)
     }
 
     class SongViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {

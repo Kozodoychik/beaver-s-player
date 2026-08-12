@@ -2,22 +2,20 @@ package ru.velikiybobr.player
 
 import android.content.ContentUris
 import android.content.Context
-import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Build
 import android.provider.MediaStore
-import android.util.Size
-import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
-import androidx.core.graphics.drawable.toBitmap
+import android.util.Log
+import androidx.media3.session.MediaController
+import androidx.media3.common.MediaItem
+import androidx.media3.common.MediaMetadata
+import androidx.core.net.toUri
 
 class MusicManager {
     val musicList: MutableList<SongItem> = ArrayList()
+    val musicItems: MutableList<MediaItem> = ArrayList()
+    var audioController: MediaController? = null
 
     constructor(context: Context) {
-        val dummyArtwork =
-            ContextCompat.getDrawable(context, R.drawable.dummy_artwork)!!.toBitmap()
-
         val collection = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
 
         val projection = arrayOf(
@@ -45,25 +43,60 @@ class MusicManager {
                 val id = cursor.getLong(idColumn)
                 val baseUri = ContentUris.withAppendedId(collection, id)
 
-                var artwork: Bitmap = dummyArtwork;
+                val artworkUri = getArtworkUri(context, baseUri)
 
-                if (Build.VERSION.SDK_INT >= 29) {
-                    try {
-                        artwork =
-                            context.contentResolver.loadThumbnail(baseUri, Size(512, 512), null)
-                    }
-                    catch (e: Exception) {}
-                }
-
-                musicList += SongItem(
+                val song = SongItem(
+                    id,
                     cursor.getString(nameColumn),
                     cursor.getString(titleColumn),
                     cursor.getString(artistColumn),
-                    artwork,
                     baseUri,
+                    artworkUri,
                     cursor.getString(mimeColumn)
                 )
+
+                musicList += song
+                musicItems += buildMediaItem(song)
             }
+        }
+    }
+
+    fun getArtworkUri(context: Context, baseUri: Uri): Uri {
+        val contentUri = baseUri.buildUpon()
+            .appendPath("albumart")
+            .build()
+
+        Log.d("huj", contentUri.toString())
+
+        try {
+            val d = context.contentResolver.openAssetFileDescriptor(contentUri, "r")
+            d?.close()
+            return contentUri
+        } catch (e: Exception) {
+            return "android.resource://ru.velikiybobr.player/${R.drawable.dummy_artwork}".toUri()
+        }
+    }
+
+    fun buildMediaItem(song: SongItem): MediaItem {
+        return MediaItem.Builder()
+            .setUri(song.baseUri)
+            .setMediaMetadata(
+                MediaMetadata.Builder()
+                    .setTitle(song.title)
+                    .setArtist(song.artist)
+                    .setArtworkUri(song.artworkUri)
+                    .build()
+            )
+            .build()
+    }
+
+    fun play(index: Int) {
+        audioController?.repeatMode = MediaController.REPEAT_MODE_ALL
+        audioController?.apply {
+            setMediaItems(musicItems)
+            seekTo(index, 0)
+            prepare()
+            play()
         }
     }
 }
